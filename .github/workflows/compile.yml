@@ -19,11 +19,18 @@ jobs:
         with:
           toolchain: stable
 
-      - name: Build Binary
-        run: cargo build
+      - name: Clean and Build Hardened Binary
+        run: |
+          cargo clean
+          cargo build --release --locked
+        env:
+          # Keep the Rust compiler safe
+          RUSTFLAGS: "-C target-cpu=x86-64"
+          # FORCE the C compiler to stick to standard x86-64 instructions and safer O2 optimization
+          CFLAGS: "-march=x86-64 -O2"
 
       - name: Upload Binary Artifact
         uses: actions/upload-artifact@v4
         with:
           name: x2rock-linux-binary
-          path: target/debug/x2rock
+          path: target/release/x2rock
