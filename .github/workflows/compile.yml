@@ -19,10 +19,11 @@ jobs:
         with:
           toolchain: stable
 
-      - name: Build Hardened Generic Binary
-        run: cargo build --release --locked
+      - name: Clean and Build Hardened Generic Binary
+        run: |
+          cargo clean
+          cargo build --release --locked
         env:
-          # This strips out every instruction extensions that can trip up low-spec CPUs
           RUSTFLAGS: "-C target-cpu=x86-64 -C target-feature=-avx,-avx2,-fma,-bmi1,-bmi2,-sse3,-ssse3,-sse4.1,-sse4.2,-popcnt"
 
       - name: Upload Binary Artifact
