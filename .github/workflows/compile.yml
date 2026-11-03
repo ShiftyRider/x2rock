@@ -1,33 +1,29 @@
-name: Compile x2rock Binary
-
+name: Compile Fork Binary
 on:
-  workflow_dispatch:
+  workflow_dispatch: # Gives you a manual trigger button on GitHub Web
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4 # Automatically checks out your fork's files
 
       - name: Install System Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libdbus-1-dev pkg-config
+          sudo apt-get install -y libdbus-1-dev pkg-config build-essential
 
-      - name: Install Rust toolchain
+      - name: Install Modern Rust Toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: stable
+          toolchain: stable # Automatically grabs latest stable Rust (1.89+)
 
-      - name: Build Generic Release Binary
-        run: cargo build --release --locked --bin x2rock
-        env:
-          RUSTFLAGS: "-C target-cpu=generic"
-          CFLAGS: "-march=generic"
+      - name: Build Optimized Release Binary
+        run: cargo build --release --locked
 
       - name: Upload Binary Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: x2rock-cli-binary
+          name: x2rock-linux-binary
           path: target/release/x2rock
