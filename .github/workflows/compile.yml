@@ -19,11 +19,11 @@ jobs:
         with:
           toolchain: stable
 
-      - name: Build Optimized Generic Binary
+      - name: Build Hardened Generic Binary
         run: cargo build --release --locked
         env:
-          # Force the compiler to use standard x86-64 instructions only (no AVX)
-          RUSTFLAGS: "-C target-cpu=x86-64"
+          # This strips out every instruction extensions that can trip up low-spec CPUs
+          RUSTFLAGS: "-C target-cpu=x86-64 -C target-feature=-avx,-avx2,-fma,-bmi1,-bmi2,-sse3,-ssse3,-sse4.1,-sse4.2,-popcnt"
 
       - name: Upload Binary Artifact
         uses: actions/upload-artifact@v4
