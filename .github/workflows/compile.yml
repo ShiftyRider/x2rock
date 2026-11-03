@@ -1,13 +1,13 @@
 name: Compile Fork Binary
 on:
-  workflow_dispatch: # Gives you a manual trigger button on GitHub Web
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4 # Automatically checks out your fork's files
+        uses: actions/checkout@v4
 
       - name: Install System Dependencies
         run: |
@@ -17,10 +17,13 @@ jobs:
       - name: Install Modern Rust Toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: stable # Automatically grabs latest stable Rust (1.89+)
+          toolchain: stable
 
-      - name: Build Optimized Release Binary
+      - name: Build Optimized Generic Binary
         run: cargo build --release --locked
+        env:
+          # Force the compiler to use standard x86-64 instructions only (no AVX)
+          RUSTFLAGS: "-C target-cpu=x86-64"
 
       - name: Upload Binary Artifact
         uses: actions/upload-artifact@v4
