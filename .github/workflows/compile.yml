@@ -52,5 +52,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: x2rock-cli-binary
-          path: target/release/x2rock     # <-- Make sure this does NOT say x2rock-deck
+          path: |
+            target/release/x2rock
+            **/release/x2rock
 
