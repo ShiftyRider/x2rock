@@ -6,6 +6,23 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    steps: 18
+ 19
+ 20
+ 21
+ 22
+ 23
+ 24
+ 25
+ 26
+name: Compile x2rock Binary
+
+on:
+  workflow_dispatch: # Allows you to trigger this manually
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -16,7 +33,20 @@ jobs:
           toolchain: stable
 
       - name: Build Release Binary
+        run: cargo build --rele
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+
+      - name: Build Release Binary
         run: cargo build --release --locked
+        env:
+          RUSTFLAGS: "-C target-cpu=generic"
+          CFLAGS: "-march=generic"
 
       - name: Upload Binary Artifact
         uses: actions/upload-artifact@v4
