@@ -16,13 +16,14 @@ jobs:
           toolchain: stable
 
       - name: Build Generic Release Binary
-        run: cargo build --release --locked --bin x2rock
+        run: cargo build --release --locked --workspace
         env:
           RUSTFLAGS: "-C target-cpu=generic"
           CFLAGS: "-march=generic"
 
-      - name: Upload Binary Artifact
+      - name: Find and Upload CLI Binary
         uses: actions/upload-artifact@v4
         with:
           name: x2rock-cli-binary
-          path: target/release/x2rock
+          path: "**/release/x2rock"
+          if-no-files-found: error
